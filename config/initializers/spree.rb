@@ -17,6 +17,8 @@ Spree.config do |config|
   config.admin_interface_logo = 'logo-horizontal.png'
   config.logo = 'logo.png'
 
+  Paperclip.options[:content_type_mappings] = {:csv => 'text/plain'}
+
   # Setup AWS S3 bucket only for staging and production
   if Rails.env.production?
     attachment_config = {
