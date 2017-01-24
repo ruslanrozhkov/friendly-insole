@@ -49,10 +49,11 @@ group :development do
   gem 'spring'
 
   # Deployment
-  gem 'capistrano-rails'
-  gem 'capistrano-rbenv', '~> 2.0', require: false
-  gem 'capistrano-rails-db'
-  gem 'capistrano-figaro-yml', '~> 1.0.2'
+  gem 'capistrano'
+  gem 'capistrano3-puma'
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm'
 end
 
 # To run project live
