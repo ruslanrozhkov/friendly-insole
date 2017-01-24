@@ -53,26 +53,3 @@ set :puma_workers, 0
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true
 set :puma_preload_app, false
-
-namespace :deploy do
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
-
-end
-
-task :restart do
-  on roles(:app), in: :sequence, wait: 5 do
-    execute "sudo kill -9 $(sudo lsof -i:3000 -t)" #stop the server
-    execute "sudo service thin start" #start the server
-    execute "sudo chown -R ubuntu:root /var/www" #make the old releases readable by ths ubuntu user
-  end
-end
-
-after :deploy, :restart
