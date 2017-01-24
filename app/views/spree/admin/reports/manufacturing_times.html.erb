@@ -1,0 +1,54 @@
+<% content_for :page_title do %>
+    <%= Spree.t(:manufacturing_times) %>
+<% end %>
+
+<% content_for :page_actions do %>
+    <%= link_to_with_icon 'arrow-left', Spree.t(:back_to_resource_list, resource: Spree.t(:report)), spree.admin_reports_url, class: 'btn btn-default' %>
+    <%= link_to_with_icon 'export', 'Export CSV', manufacturing_times_admin_reports_path(format: 'csv').concat('?' + params.to_query), class: 'btn btn-success' %>
+<% end %>
+
+<div class="well">
+  <%= search_form_for @search, :url => spree.manufacturing_times_admin_reports_path  do |s| %>
+      <div class="form-group date-range-filter">
+        <div class="date-range-filter row">
+          <div class="col-md-4">
+            <%= label_tag 'q[created_at_gt]', Spree.t(:date_from) %>
+            <%= s.text_field :created_at_gt, :class => 'datepicker datepicker-from form-control', :value => datepicker_field_value(params[:q][:created_at_gt]) %>
+          </div>
+          <div class="col-md-4">
+            <%= label_tag 'q[created_at_gt]', Spree.t(:date_to) %>
+            <%= s.text_field :created_at_lt, :class => 'datepicker datepicker-to form-control', :value => datepicker_field_value(params[:q][:created_at_lt]) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+  <% end %>
+</div>
+
+<table class="table table-bordered admin-report">
+  <thead>
+  <tr>
+    <th>Order Number</th>
+    <th>Available for Manufacturing</th>
+    <th>Shipped</th>
+    <th>Total Time</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @statuses.each do |status| %>
+      <tr>
+        <td><%= status.order.number %></td>
+        <td><%= l status.created_at.to_date, :format => '%b %d, %Y' %></td>
+        <td><%= l status.updated_at.to_date, :format => '%b %d, %Y' %></td>
+        <td><%= distance_of_time_in_words(status.created_at, status.updated_at) %></td>
+      </tr>
+  <% end %>
+  <tr>
+    <td colspan="3" class="text-right">Average</td>
+    <td><%= pluralize((sprintf "%.1f", @average), 'day') %></td>
+  </tr>
+  </tbody>
+</table>

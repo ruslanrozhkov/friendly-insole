@@ -1,0 +1,19 @@
+[data-hook="order_details_line_item_row"]{
+  [data-hook="order_item_total"]{
+    white-space: nowrap;
+
+    span{
+      padding-right:8px;
+    }
+
+    i{
+      cursor: pointer;
+      padding-left:8px;
+      font-size:14px;
+    }
+
+    [data-toggle]{
+      color:initial;
+    }
+  }
+}

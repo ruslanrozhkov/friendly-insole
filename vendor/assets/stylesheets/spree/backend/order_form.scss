@@ -1,0 +1,77 @@
+.order-form-row{
+  td{
+    background-color: #fcfcfc;
+
+    .toggle-form{
+      i{
+        cursor: pointer;
+      }
+    }
+  }
+  .order-form{
+    padding:20px;
+  }
+}
+
+.order-form {
+  .dropzone{
+    min-height: 200px;
+    width: 100%;
+    background-color: #fcfcfc;
+    border: dashed 2px lightblue;
+    border-radius: 8px;
+    position: relative;
+
+    input[type='file']{
+      position: absolute;
+      top: 0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      opacity: 0;
+    }
+
+    p{
+      padding: 20px 20px 0 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  .dropzone:hover{
+    border-color: deepskyblue;
+    background-color: darken(#fcfcfc, 1%);
+  }
+
+  .filename-link{
+    word-break: break-all;
+  }
+
+  .value {
+    display: none;
+  }
+}
+
+.order-form.read-only{
+  input, textarea, .choices, .dropzone {
+    display: none;
+  }
+
+  .checkbox-inline{
+    padding-left:0;
+    cursor: default;
+
+    b{
+      color: limegreen;
+    }
+  }
+
+  .checkbox-inline.yes{
+    font-weight: bold;
+    color: limegreen;
+  }
+
+  .value{
+    display: block;
+  }
+}

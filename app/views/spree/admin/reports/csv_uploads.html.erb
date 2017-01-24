@@ -1,0 +1,48 @@
+<% content_for :page_title do %>
+    <%= Spree.t(:csv_uploads) %>
+<% end %>
+
+<% content_for :page_actions do %>
+    <%= link_to_with_icon 'arrow-left', Spree.t(:back_to_resource_list, resource: Spree.t(:report)), spree.admin_reports_url, class: 'btn btn-default' %>
+    <%= link_to_with_icon 'export', 'Export CSV', csv_uploads_admin_reports_path(format: 'csv').concat('?' + params.to_query), class: 'btn btn-success' %>
+<% end %>
+
+<div class="well">
+  <%= search_form_for @search, :url => spree.csv_uploads_admin_reports_path  do |s| %>
+      <div class="form-group date-range-filter">
+        <div class="date-range-filter row">
+          <div class="col-md-4">
+            <%= label_tag 'q[created_at_gt]', Spree.t(:date_from) %>
+            <%= s.text_field :created_at_gt, :class => 'datepicker datepicker-from form-control', :value => datepicker_field_value(params[:q][:created_at_gt]) %>
+          </div>
+          <div class="col-md-4">
+            <%= label_tag 'q[created_at_lt]', Spree.t(:date_to) %>
+            <%= s.text_field :created_at_lt, :class => 'datepicker datepicker-to form-control', :value => datepicker_field_value(params[:q][:created_at_lt]) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+  <% end %>
+</div>
+
+<table class="table table-bordered admin-report table-responsive" style="display: block">
+  <thead>
+  <tr>
+    <% @csv_column_headers[1..-2].each do |column| %>
+        <th><%= column %></th>
+    <% end %>
+  </tr>
+  </thead>
+  <tbody>
+  <% @csvs.each do |csv| %>
+      <tr>
+        <% csv.attributes.to_a[1..-2].each do |key, value| %>
+            <td><%= key == 'created_at' ? (l value.to_date, :format => '%b %d, %Y') : value %></td>
+        <% end %>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

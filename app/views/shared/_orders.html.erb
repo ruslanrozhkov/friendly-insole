@@ -1,0 +1,129 @@
+<% if @has_orders %>
+    <%= search_form_for @search, url: root_path, :class => 'well orders-filter' do |s| %>
+        <div class="row">
+          <div class="col-sm-2 form-group">
+            <%= s.label :completed_at_gt, 'From Date', class: 'small' %>
+            <%= s.text_field :completed_at_gt, :class => 'form-control input-sm', :placeholder => 'From Date', :value => datepicker_field_value(params[:q][:completed_at_gt]) %>
+          </div>
+          <div class="col-sm-2 form-group">
+            <%= s.label :completed_at_lt, 'To Date', class: 'small'  %>
+            <%= s.text_field :completed_at_lt, :class => 'form-control input-sm', :placeholder => 'To Date', :value => datepicker_field_value(params[:q][:completed_at_lt]) %>
+          </div>
+          <div class="col-sm-2 form-group">
+            <%= label_tag :status, 'Status', class: 'small'  %>
+            <%= select_tag :status, options_for_select([['All', ''], ['Canceled', 'Canceled'], ['Approved', 'Approved'], ['In Production', 'In Production'], ['Pending Approval', 'Pending Approval'], ['Shipped', 'Shipped']], params[:status]), :class => 'form-control input-sm' %>
+          </div>
+          <div class="col-sm-3 form-group">
+            <%= s.label :number_cont, 'Order Number', class: 'small'  %>
+            <%= s.text_field :number_cont, :class => 'form-control input-sm', :placeholder => 'Order Number', :value => params[:q][:number_cont] %>
+          </div>
+          <div class="col-sm-2 form-group">
+            <%= label_tag :patient_id, 'Patient Id', class: 'small'  %>
+            <%= text_field_tag :patient_id, params[:patient_id], :class => 'form-control input-sm', :placeholder => 'Patient Id' %>
+          </div>
+          <div class="col-sm-1">
+            <label class="small">&nbsp;</label>
+            <%= button content_tag(:i, nil, class: 'glyphicon glyphicon-search'), nil, :submit, class: 'btn-sm btn-block' %>
+          </div>
+        </div>
+    <% end %>
+<% end %>
+
+<% if @orders.present? %>
+    <table class="table table-responsive table-striped orders-table">
+      <thead class="active">
+      <tr>
+        <th><%= link_to Spree::Order.human_attribute_name(:number), sort_by(:number) %> <%= order_by_icon(:number) %></th>
+        <th><%= link_to Spree.t(:date), sort_by(:completed_at) %> <%= order_by_icon(:completed_at) %></th>
+        <th>Payment</th>
+        <th>Status</th>
+        <th><%= link_to Spree.t(:total), sort_by(:total) %> <%= order_by_icon(:total) %></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @orders.each do |order| %>
+          <tr class="order-item">
+            <td><%= link_to order.number, order_url(order) %></td>
+            <td><%= l order.completed_at.to_date, :format => '%b %d, %Y' %></td>
+            <td><%= order.payment_state == 'balance_due' ? 'Pending' : Spree.t("payment_states.#{order.payment_state}").titleize if order.payment_state %></td>
+            <td>
+              <%= order.generate_status %>
+              <%= render 'spree/shared/shipment_tracking', order: order if order.shipped? %>
+            </td>
+            <td class="lead text-primary"><%= order.display_total %></td>
+            <td>
+              <% if !order.canceled? and !order.approved? %>
+                  <i class="glyphicon glyphicon-remove text-danger cancel-order-btn" data-order-number="<%= order.number %>"></i>
+              <% end %>
+            </td>
+            <td><a href="#" data-order-number="<%= order.number %>" class="duplicate-order"><i class="glyphicon glyphicon-duplicate"></i></a></td>
+            <td><i class="glyphicon glyphicon-menu-down" data-toggle="collapse" data-target="#order<%= order.id %>"></i></td>
+          </tr>
+          <tr>
+            <td colspan="9">
+              <div class="accordion-body collapse" id="order<%= order.id %>">
+                <% order.line_items.each do |line_item| %>
+                    <% if line_item.order_form.present? %>
+                        <div class="row">
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>Patient Id</label>
+                              <p><%= line_item.order_form.patient_id %></p>
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>Shoe Style</label>
+                              <p><%= line_item.variant.option_values.first.name %></p>
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>Shoe Size</label>
+                              <p><%= line_item.order_form.shoe_size %></p>
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <div class="form-group">
+                              <label>Gender</label>
+                              <p><%= line_item.order_form.gender %></p>
+                            </div>
+                          </div>
+                          <div class="col-xs-4">
+                            <div class="form-group">
+                              <label>Notes</label>
+                              <p><%= line_item.order_form.notes %></p>
+                            </div>
+                          </div>
+                        </div>
+                    <% else %>
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <div class="alert alert-warning">
+                              No <strong>Order Form</strong> for line item <strong><%= line_item.id %></strong>
+                            </div>
+                          </div>
+                        </div>
+                    <% end %>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+<% else %>
+    <% if @has_orders %>
+        <div class="alert alert-warning text-center">
+          <strong>Oops!</strong> Your search returned no results.
+        </div>
+    <% else %>
+        <div class="alert alert-info text-center">
+          You have no orders yet, start a new order here <i class="glyphicon glyphicon-arrow-right"></i>
+          <%= link_to Spree.t(:new_insole), Spree::Product.last, :class => 'btn btn-primary' %>
+        </div>
+    <% end %>
+<% end %>

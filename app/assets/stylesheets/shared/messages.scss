@@ -1,0 +1,15 @@
+.messages{
+  .message{
+    margin-bottom:8px;
+    border:solid thin lightgray;
+    background-color: wheat;
+
+    td{
+      padding:8px;
+      vertical-align: top;
+    }
+    td:nth-child(2){
+      word-break: break-word;
+    }
+  }
+}

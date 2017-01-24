@@ -1,0 +1,7 @@
+<tr class="order-form-row">
+  <td colspan="6">
+    <%= form_tag do %>
+        <%= render :partial => 'shared/order_form', :locals => {:order_form => item.order_form} %>
+    <% end %>
+  </td>
+</tr>

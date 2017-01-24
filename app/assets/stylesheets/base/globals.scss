@@ -1,0 +1,11 @@
+body{
+  padding-bottom:70px;
+}
+
+.alert-notice{
+  @extend .alert-success;
+}
+
+.alert-error, .alert-alert{
+  @extend .alert-danger;
+}

@@ -1,0 +1,45 @@
+<div class="messaging">
+  <div class="messages-container">
+    <% order.messages.each do |message| %>
+        <% if message.intended_for %>
+            <% if (spree_current_user.has_spree_role?(message.intended_for.name) and message.user.has_spree_role?(intended_for)) || (message.user == spree_current_user and message.intended_for.name == intended_for) %>
+                <table class="table message">
+                  <tr>
+                    <td width="20%">
+                      <div class="user">
+                        <% if message.user == spree_current_user %>
+                            YOU
+                        <% elsif message.user.has_spree_role?('admin') %>
+                            HQ
+                        <% elsif message.user.has_spree_role?('manufacturer') %>
+                            MFR
+                        <% else %>
+                            CUS
+                        <% end %>
+                    </div>
+                    </td>
+                    <td>
+                      <%= message.body %><br>
+                      <small>
+                        <%= l message.created_at.to_date, :format => '%b %d, %Y' %>
+                        <%= l message.created_at.to_time, :format => '%l:%M %p' %>
+                      </small>
+                    </td>
+                  </tr>
+                </table>
+            <% end %>
+        <% end %>
+    <% end %>
+  </div>
+
+  <div class="entry-container">
+    <%= form_tag '/messages', method: :post do %>
+        <%= text_area_tag :body, nil, id: "#{intended_for}_body" %>
+        <%= hidden_field_tag :order_number, order.number %>
+        <%= hidden_field_tag :from_url, request.path_info %>
+        <%= hidden_field_tag :intended_for, intended_for %>
+        <div class="text-right"><%= submit_tag 'Submit', :class => 'btn btn-primary' %></div>
+        <div class="clearfix"></div>
+    <% end %>
+  </div>
+</div>

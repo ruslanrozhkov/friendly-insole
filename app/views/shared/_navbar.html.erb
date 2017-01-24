@@ -1,0 +1,35 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navmenu" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navmenu">
+      <ul class="nav navbar-nav">
+        <li><%= link_to Spree.t(:home), spree.root_path %></li>
+        <!--<li><%= link_to Spree.t(:products), spree.products_path %></li>-->
+        <% if @is_user or @is_admin %>
+            <li><p class="navbar-btn"><%= link_to Spree.t(:new_insole), Spree::Product.last, :class => 'btn btn-primary' %></p></li>
+        <% end %>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <% if @is_admin %>
+            <li><%= link_to 'Admin', spree.admin_path %></li>
+        <% end %>
+        <%= render :partial => 'spree/shared/login_bar' %>
+        <% if @is_user or @is_admin %>
+            <li><%= render :partial => 'spree/shared/link_to_cart' %></li>
+        <% end %>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<!-- class="<%= request.path == spree.root_path ? 'active' : '' %>"-->

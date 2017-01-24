@@ -1,0 +1,25 @@
+<table class="row header">
+  <tr>
+    <td class="center" align="center">
+        <table class="container">
+          <tr>
+            <td class="wrapper last">
+
+              <table class="twelve columns" style="border-bottom: solid thin lightgray; margin-bottom: 20px;">
+                <tr>
+                  <td class="six sub-columns">
+                    <%= image_tag attachments[Spree::Config.logo].url %>
+                  </td>
+                  <td class="six sub-columns last" style="text-align:right; vertical-align:middle;">
+                    <span class="template-label"><%= Spree::Store.current.name %></span>
+                  </td>
+                  <td class="expander"></td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+        </table>
+    </td>
+  </tr>
+</table>

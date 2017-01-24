@@ -1,0 +1,23 @@
+.orders-table{
+  td{
+    vertical-align: inherit !important;
+  }
+
+  .order-item{
+    i{
+      cursor: pointer;
+    }
+  }
+}
+
+.orders-filter{
+  padding: 8px 24px 0 24px;
+
+  [class^=col-] {
+    padding:0 8px;
+  }
+
+  select{
+    text-transform: capitalize;
+  }
+}

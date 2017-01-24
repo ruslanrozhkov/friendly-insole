@@ -1,0 +1,46 @@
+<div class="save-for-later">
+  <h3 class="page-header">Saved For Later <span class="badge"><%= @saved_line_items.count %></span></h3>
+
+  <% if @saved_line_items.present? %>
+      <table class="table">
+        <tr class="active">
+          <th colspan="2">Item</th>
+          <th>Date Saved</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th></th>
+        </tr>
+        <% @saved_line_items.each do |item| variant = item.variant %>
+            <tr>
+              <td>
+                <% if variant.images.length == 0 %>
+                    <%= link_to small_image(variant.product), variant.product %>
+                <% else %>
+                    <%= link_to image_tag(variant.images.first.attachment.url(:small)), variant.product %>
+                <% end %>
+              </td>
+              <td>
+                <h4><%= link_to variant.name, product_path(variant.product) %></h4>
+                <%= variant.options_text %>.
+                <span class="line-item-description" data-hook="line_item_description">
+                  <%= line_item_description_text(variant.description) %>
+                </span>
+                <p>Patient Id: <b><%= item.order_form.patient_id if item.order_form %></b></p>
+              </td>
+              <td>
+                <h5><%= l item.created_at.to_date, :format => '%b %d, %Y' %></h5>
+              </td>
+              <td class="lead text-primary">
+                <%= Spree::Money.new(variant.price, currency: variant.currency) %>
+              </td>
+              <td class="lead text-primary">
+                <%= item.quantity %>
+              </td>
+              <td class="text-right">
+                <%= link_to 'Move to Cart', '#', class: 'move-to-cart-btn btn btn-link', data: { 'saved-line-item': item.id }%>
+              </td>
+            </tr>
+        <% end %>
+      </table>
+  <% end %>
+</div>

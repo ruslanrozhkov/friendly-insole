@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Friendly Insole<%= ' - Manufacturer' if !@is_user and !@is_admin %></title>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+
+  <%= favicon_link_tag %>
+  <%= csrf_meta_tags %>
+
+  <%= javascript_include_tag 'external', 'data-turbolinks-track' => true %>
+
+  <%= javascript_tag do %>
+      <%== "var AUTH_TOKEN = #{form_authenticity_token.inspect};" %>
+      <%== "Spree.api_key = '#{try_spree_current_user.spree_api_key}';" if try_spree_current_user %>
+  <% end %>
+</head>
+<body id="<%= @body_id || 'default' %>" data-hook="body">
+
+<%= render partial: 'modals/tracking_modal' %>
+
+<div class="text-center">
+  <%= image_tag 'logo.png' %>
+</div>
+
+<div class="container">
+  <%= render :partial => 'shared/navbar' if spree_current_user %>
+
+  <%= flash_messages %>
+  <%= yield %>
+</div>
+
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+</body>
+</html>

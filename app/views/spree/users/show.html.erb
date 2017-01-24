@@ -1,0 +1,58 @@
+<h1 class="page-header"><%= accurate_title %></h1>
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        User Information
+        <%= link_to Spree.t(:edit), spree.edit_account_path, :class => 'btn btn-default btn-xs pull-right' %>
+      </div>
+      <div class="panel-body">
+        <strong><%= Spree.t(:email) %></strong>
+        <p><%= @user.email %></p>
+      </div>
+    </div>
+
+    <!-- Come back to this later -->
+    <!--<div class="panel panel-default">-->
+      <!--<div class="panel-heading">-->
+        <!--Payment Information-->
+        <!--<%= link_to Spree.t(:edit), spree.edit_account_path, :class => 'btn btn-default btn-xs pull-right' %>-->
+      <!--</div>-->
+      <!--<div class="panel-body">-->
+
+      <!--</div>-->
+    <!--</div>-->
+  </div>
+  <!-- Come back to this later -->
+  <!--<div class="col-sm-4">-->
+    <!--<div class="panel panel-default">-->
+      <!--<div class="panel-heading">-->
+        <!--Default Billing Address-->
+        <!--<%= link_to Spree.t(:new), spree.edit_account_path, :class => 'btn btn-default btn-xs pull-right' %>-->
+      <!--</div>-->
+      <!--<div class="panel-body">-->
+        <!--<%= form_for @user, :method => :patch do |f| %>-->
+          <!--<% @addresses.each do |address| %>-->
+              <!--<%= render :partial => 'shared/address_details', :locals => { :f => f, :a => address, :type => 'bill' } %>-->
+          <!--<% end %>-->
+        <!--<% end %>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="col-sm-4">-->
+    <!--<div class="panel panel-default">-->
+      <!--<div class="panel-heading">-->
+        <!--Default Shipping Address-->
+        <!--<%= link_to Spree.t(:new), spree.edit_account_path, :class => 'btn btn-default btn-xs pull-right' %>-->
+      <!--</div>-->
+      <!--<div class="panel-body">-->
+        <!--<%= form_for @user, :method => :patch do |f| %>-->
+            <!--<% @addresses.each do |address| %>-->
+                <!--<%= render :partial => 'shared/address_details', :locals => { :f => f, :a => address, :type => 'ship' } %>-->
+            <!--<% end %>-->
+        <!--<% end %>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+</div>

@@ -1,0 +1,23 @@
+<div class="pull-left">
+  <h1 class="panel-title">
+    <%= shipment.number %> - <%= Spree.t("shipment_states.#{shipment.state}").titleize %>
+  </h1>
+  <small><%= Spree.t(:package_from).capitalize %> <strong>'<%= shipment.stock_location.name %>'</strong></small>
+</div>
+
+<div class="pull-right">
+  <% if shipment.shipping_label  %>
+      <%#= link_to_with_icon 'print', 'Print', '#', class: 'btn btn-default print-shipping-label-btn' %>
+      <%= link_to_with_icon 'open', 'View Label', shipment.shipping_label.label.url(:original, false), class: 'btn btn-default', target: :blank %>
+      <iframe id="iframe-<%= shipment.id %>" class="hide" src="<%= shipment.shipping_label.label.url(:original, false) %>"></iframe>
+<% end %>
+  <% if shipment.ready? and can? :update, shipment %>
+      <%= link_to shipment.shipping_label ? Spree.t(:generate_new_label) : Spree.t(:generate_label), '#', class: 'btn btn-default', data: { 'toggle' => 'modal', 'target' => '#shippingLabelModal' } %>
+      <%= link_to Spree.t(:ship), 'javascript:;', class: 'ship btn btn-success', data: { 'shipment-number' => shipment.number } %>
+  <% else %>
+      <%= link_to shipment.shipping_label ? Spree.t(:generate_new_label) : Spree.t(:generate_label), '#', class: 'btn btn-default', data: { 'toggle' => 'modal', 'target' => '#shippingLabelModal' } %>
+  <% end %>
+</div>
+
+<div class='clearfix'></div>
+

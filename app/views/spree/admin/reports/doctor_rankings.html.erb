@@ -1,0 +1,50 @@
+<% content_for :page_title do %>
+    <%= Spree.t(:client_rankings) %>
+<% end %>
+
+<% content_for :page_actions do %>
+    <%= link_to_with_icon 'arrow-left', Spree.t(:back_to_resource_list, resource: Spree.t(:report)), spree.admin_reports_url, class: 'btn btn-default' %>
+    <%= link_to_with_icon 'export', 'Export CSV', client_rankings_admin_reports_path(format: 'csv').concat('?' + params.to_query), class: 'btn btn-success' %>
+<% end %>
+
+<div class="well">
+  <%= search_form_for @search, :url => spree.client_rankings_admin_reports_path  do |s| %>
+      <div class="form-group date-range-filter">
+        <div class="date-range-filter row">
+          <div class="col-md-4">
+            <%= label_tag 'q[completed_at_gt]', Spree.t(:date_from) %>
+            <%= s.text_field :completed_at_gt, :class => 'datepicker datepicker-from form-control', :value => datepicker_field_value(params[:q][:completed_at_gt]) %>
+          </div>
+          <div class="col-md-4">
+            <%= label_tag 'q[completed_at_lt]', Spree.t(:date_to) %>
+            <%= s.text_field :completed_at_lt, :class => 'datepicker datepicker-to form-control', :value => datepicker_field_value(params[:q][:completed_at_lt]) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+  <% end %>
+</div>
+
+<table class="table table-bordered admin-report">
+  <thead>
+  <tr>
+    <th>Rank</th>
+    <th>Client Email</th>
+    <th>Items Ordered</th>
+    <th>Total Spent</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @orders_by_users.each_with_index do |user_order, index| %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= user_order[:email] %></td>
+        <td><%= user_order[:item_count] %></td>
+        <td><%= number_to_currency user_order[:total_spent] %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

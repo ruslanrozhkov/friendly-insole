@@ -1,0 +1,14 @@
+<% @body_id = 'dashboard' %>
+
+<div class="row">
+  <div class="col-md-8">
+    <% if @is_user or @is_admin %>
+        <%= render :partial => 'shared/orders'%>
+    <% else %>
+        <%= render :partial => 'shared/orders_for_manufacturer'%>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <%= render :partial => 'shared/messages', :locals => {:messages => @messages}%>
+  </div>
+</div>

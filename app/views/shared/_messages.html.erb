@@ -1,0 +1,26 @@
+<div class="messages">
+  <% if messages.present? %>
+      <% messages.each do |message| %>
+          <table class="table message" data-id="<%= message.id %>">
+            <tr>
+              <td width="30%">
+                <strong><%= link_to message.order.number, request.path_info.include?('admin') ? edit_admin_order_path(message.order) : order_url(message.order), :class => 'message-order-number' %></strong><br>
+                <small>
+                  <%= l message.created_at.to_date, :format => '%b %d, %Y' %><br>
+                  <%= l message.created_at.to_time, :format => '%l:%M %p' %>
+                </small>
+              </td>
+              <td><%= message.body %></td>
+              <td width="10%">
+                <%= link_to '<i class="glyphicon glyphicon-share-alt"></i>'.html_safe, request.path_info.include?('admin') ? message.user.has_spree_role?('manufacturer') ? edit_admin_order_path(message.order).concat("#manufacturer") : edit_admin_order_path(message.order).concat("#user") : order_url(message.order).concat("#reply"), :class => 'message-reply' %>
+              </td>
+              <td width="10%">
+                <a class="message-dismiss" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+              </td>
+            </tr>
+          </table>
+      <% end %>
+  <% else %>
+      <div class="alert alert-info"><strong>Hooray!</strong> You have no pending messages.</div>
+  <% end %>
+</div>

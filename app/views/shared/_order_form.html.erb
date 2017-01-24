@@ -1,0 +1,699 @@
+<% order_form = order_form || OrderForm.defaults()  %>
+
+<% unless order_form.id.nil? %>
+    <div class="toggle-form"><b>Attached Order Form</b> <i class="glyphicon glyphicon-menu-down pull-right" data-toggle="collapse" data-target="#order-form-<%= order_form.id || '' %>"></i></div>
+<% end %>
+<div class="order-form accordion-body collapse <%= 'in' if order_form.id.nil? %> <%= 'read-only' if !order_form.id.nil? %>" id="order-form-<%= order_form.id || '' %>">
+
+  <%= field_set_tag '1. Patient Information' do %>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <%= label_tag 'options[patient_id]', 'Patient ID' %>
+          <%= text_field_tag 'options[patient_id]', order_form.patient_id, :class => 'form-control' %>
+          <p class="value"><%= order_form.patient_id %></p>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="form-group">
+          <%= label_tag 'options[age]', 'Age' %>
+          <%= number_field_tag 'options[age]', order_form.age, :class => 'form-control' %>
+          <p class="value"><%= order_form.age %></p>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <%= label_tag 'options[weight]', 'Weight' %>
+          <%= text_field_tag 'options[weight]', order_form.weight, :class => 'form-control' %>
+          <p class="value"><%= order_form.weight %></p>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <%= label_tag 'options[shoe_size]', 'Shoe Size' %>
+          <%= text_field_tag 'options[shoe_size]', order_form.shoe_size, :class => 'form-control' %>
+          <p class="value"><%= order_form.shoe_size %></p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <div><label>Gender</label></div>
+          <div class="choices">
+            <label class="radio-inline"><%= radio_button_tag 'options[gender]', :male, order_form.gender == 'male' || order_form.gender.blank? %> Male</label>
+            <label class="radio-inline"><%= radio_button_tag 'options[gender]', :female, order_form.gender == 'female' %> Female</label>
+          </div>
+          <p class="value"><%= order_form.gender %></p>
+        </div>
+      </div>
+      <div class="col-sm-8">
+        <div class="form-group">
+          <div><label>Diabetic</label></div>
+          <div class="choices">
+            <label class="radio-inline"><%= radio_button_tag 'options[diabetic]', :no, order_form.diabetic == 'no' || order_form.diabetic.blank? %> No</label>
+            <label class="radio-inline"><%= radio_button_tag 'options[diabetic]', :yes, order_form.diabetic == 'yes' %> Yes</label>
+          </div>
+          <p class="value"><%= order_form.diabetic %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <br>
+
+  <%= field_set_tag '2. File Uploads' do %>
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="form-group">
+          <div class="dropzone text-center">
+            <h3 class="text-primary">STL File L <br><small>Drag and drop<br>or click here</small></h3>
+            <%= file_field_tag 'options[stl_file_l]', :title => order_form.stl_file_l.original_filename %>
+            <p class="filename"><%= order_form.stl_file_l.original_filename || 'No file chosen' %></p>
+            <h2 class="filesize" data-filesize="<%= order_form.stl_file_l.size %>"></h2>
+          </div>
+          <% if !order_form.stl_file_l.blank? %>
+              <div class="filename-link"><a href="<%= order_form.stl_file_l.url(:original, false) %>" class="value"><%= order_form.stl_file_l.original_filename %> <i class="glyphicon glyphicon-download-alt text-info"></i></a></div>
+          <% else %>
+              <p class="value">None.</p>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <div class="dropzone text-center">
+            <h3 class="text-primary">STL File R <br><small>Drag and drop<br> or click here</small></h3>
+            <%= file_field_tag 'options[stl_file_r]', :title => order_form.stl_file_r.original_filename %>
+            <p class="filename"><%= order_form.stl_file_r.original_filename || 'No file chosen' %></p>
+            <h2 class="filesize" data-filesize="<%= order_form.stl_file_r.size %>"></h2>
+          </div>
+          <% if !order_form.stl_file_r.blank? %>
+              <div class="filename-link"><a href="<%= order_form.stl_file_r.url(:original, false) %>" class="value"><%= order_form.stl_file_r.original_filename %> <i class="glyphicon glyphicon-download-alt text-info"></i></a></div>
+          <% else %>
+              <p class="value">None.</p>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div class="dropzone text-center">
+            <h3 class="text-primary">CSV File <br><small>Drag and drop<br>or click here</small></h3>
+            <%= file_field_tag 'options[csv_file]', :title => order_form.csv_file.original_filename %>
+            <p  class="filename"><%= order_form.csv_file.original_filename || 'No file chosen' %></p>
+            <h2 class="filesize" data-filesize="<%= order_form.csv_file.size %>"></h2>
+          </div>
+          <% if !order_form.csv_file.blank? %>
+              <div class="filename-link"><a href="<%= order_form.csv_file.url(:original, false) %>" class="value"><%= order_form.csv_file.original_filename %> <i class="glyphicon glyphicon-download-alt text-info"></i></a></div>
+          <% else %>
+              <p class="value">None.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <br>
+
+  <%= field_set_tag '3. Foot Information' do %>
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label>Orthotic Profile</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[orthotic_profile]', :sport, order_form.orthotic_profile == 'sport' %> Sport</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[orthotic_profile]', :regular_dress, order_form.orthotic_profile == 'regular_dress' %> Regular Dress</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[orthotic_profile]', :high_dress, order_form.orthotic_profile == 'high_dress' %> High Dress</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[orthotic_profile]', :cobra, order_form.orthotic_profile == 'cobra' %> Cobra</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[orthotic_profile]', :control, order_form.orthotic_profile == 'control' %> Control (Shaffer)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[orthotic_profile]', :soccer_cleats, order_form.orthotic_profile == 'soccer_cleats' %> Soccer/Cleats</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[orthotic_profile]', :skate_ski, order_form.orthotic_profile == 'skate_ski' %> Skate/Ski</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[orthotic_profile]', :none, order_form.orthotic_profile == 'none' || order_form.orthotic_profile.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.orthotic_profile %></p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Shell Material</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_material]', :polypropylene_1_8, order_form.shell_material == 'polypropylene_1_8' %> Polypropylene 1/8 (STD)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_material]', :polypropylene_3_16, order_form.shell_material == 'polypropylene_3_16' %> Polypropylene (3/16)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_material]', :graphite, order_form.shell_material == 'graphite' %> Graphite</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_material]', :pelite_eva_soft, order_form.shell_material == 'pelite_eva_soft' %> Pelite/Eva (Soft, 35)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_material]', :pelite_eva_firm, order_form.shell_material == 'pelite_eva_firm' %> Pelite/Eva (Firm, 50+)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_material]', :subortholene, order_form.shell_material == 'subortholene' %> Subortholene (1/8)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_material]', :none, order_form.shell_material == 'none' || order_form.shell_material.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.shell_material %></p>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="form-group">
+          <label>Shell Modifications</label>
+          <table width="100%">
+            <tr>
+              <td>Fill arch</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_fill_arch_left %>">
+                  <%= check_box_tag 'options[shell_modifications_fill_arch_left]', true, order_form.shell_modifications_fill_arch_left %>
+                  <%= hidden_field_tag 'options[shell_modifications_fill_arch_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_fill_arch_right %>">
+                  <%= check_box_tag 'options[shell_modifications_fill_arch_right]', true, order_form.shell_modifications_fill_arch_right %>
+                  <%= hidden_field_tag 'options[shell_modifications_fill_arch_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>First met cutout</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_first_met_cutout_left %>">
+                  <%= check_box_tag 'options[shell_modifications_first_met_cutout_left]', true, order_form.shell_modifications_first_met_cutout_left %>
+                  <%= hidden_field_tag 'options[shell_modifications_first_met_cutout_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_first_met_cutout_right %>">
+                  <%= check_box_tag 'options[shell_modifications_first_met_cutout_right]', true, order_form.shell_modifications_first_met_cutout_right %>
+                  <%= hidden_field_tag 'options[shell_modifications_first_met_cutout_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>First ray cutout</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_first_ray_cutout_left %>">
+                  <%= check_box_tag 'options[shell_modifications_first_ray_cutout_left]', true, order_form.shell_modifications_first_ray_cutout_left %>
+                  <%= hidden_field_tag 'options[shell_modifications_first_ray_cutout_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_first_ray_cutout_right %>">
+                  <%= check_box_tag 'options[shell_modifications_first_ray_cutout_right]', true, order_form.shell_modifications_first_ray_cutout_right %>
+                  <%= hidden_field_tag 'options[shell_modifications_first_ray_cutout_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>Flange lat met</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_flange_lat_med_left %>">
+                  <%= check_box_tag 'options[shell_modifications_flange_lat_med_left]', true, order_form.shell_modifications_flange_lat_med_left %>
+                  <%= hidden_field_tag 'options[shell_modifications_flange_lat_med_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_flange_lat_med_right %>">
+                  <%= check_box_tag 'options[shell_modifications_flange_lat_med_right]', true, order_form.shell_modifications_flange_lat_med_right %>
+                  <%= hidden_field_tag 'options[shell_modifications_flange_lat_med_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>Gate plate in out</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_gate_plate_in_out_left %>">
+                  <%= check_box_tag 'options[shell_modifications_gate_plate_in_out_left]', true, order_form.shell_modifications_gate_plate_in_out_left %>
+                  <%= hidden_field_tag 'options[shell_modifications_gate_plate_in_out_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_gate_plate_in_out_right %>">
+                  <%= check_box_tag 'options[shell_modifications_gate_plate_in_out_right]', true, order_form.shell_modifications_gate_plate_in_out_right %>
+                  <%= hidden_field_tag 'options[shell_modifications_gate_plate_in_out_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>Heel spur hole</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_heel_spur_hole_left %>">
+                  <%= check_box_tag 'options[shell_modifications_heel_spur_hole_left]', true, order_form.shell_modifications_heel_spur_hole_left %>
+                  <%= hidden_field_tag 'options[shell_modifications_heel_spur_hole_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.shell_modifications_heel_spur_hole_right %>">
+                  <%= check_box_tag 'options[shell_modifications_heel_spur_hole_right]', true, order_form.shell_modifications_heel_spur_hole_right %>
+                  <%= hidden_field_tag 'options[shell_modifications_heel_spur_hole_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div><label>Post Heel</label></div>
+          <div class="choices">
+            <label class="radio-inline"><%= radio_button_tag 'options[post_heel]', :extrinsic, order_form.post_heel == 'extrinsic' %> Extrinsic</label>
+            <label class="radio-inline"><%= radio_button_tag 'options[post_heel]', :intrinsic, order_form.post_heel == 'intrinsic' %> Intrinsic</label>
+            <label class="radio-inline"><%= radio_button_tag 'options[post_heel]', :none, order_form.post_heel == 'none' || order_form.post_heel.blank? %> None</label>
+          </div>
+          <p class="value"><%= order_form.post_heel %></p>
+        </div>
+        <div class="form-group">
+          <label>Right</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[post_heel_right_medial]', order_form.post_heel_right_medial, :class => 'form-control', :placeholder => 'Medial' %>
+              <p class="value">Medial: <%= order_form.post_heel_right_medial %></p>
+            </div>
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[post_heel_right_lateral]', order_form.post_heel_right_lateral, :class => 'form-control', :placeholder => 'Lateral' %>
+              <p class="value">Lateral: <%= order_form.post_heel_right_lateral %></p>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Left</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[post_heel_left_medial]', order_form.post_heel_left_medial, :class => 'form-control', :placeholder => 'Medial' %>
+              <p class="value">Medial: <%= order_form.post_heel_left_medial %></p>
+            </div>
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[post_heel_left_lateral]', order_form.post_heel_left_lateral, :class => 'form-control', :placeholder => 'Lateral' %>
+              <p class="value">Lateral: <%= order_form.post_heel_left_lateral %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div><label>Post Forefoot</label></div>
+          <div class="choices">
+            <label class="radio-inline"><%= radio_button_tag 'options[post_forefoot]', :extrinsic, order_form.post_forefoot == 'extrinsic' %> Extrinsic</label>
+            <label class="radio-inline"><%= radio_button_tag 'options[post_forefoot]', :intrinsic, order_form.post_forefoot == 'intrinsic' %> Intrinsic</label>
+            <label class="radio-inline"><%= radio_button_tag 'options[post_forefoot]', :none, order_form.post_forefoot == 'none' || order_form.post_forefoot.blank? %> None</label>
+          </div>
+          <p class="value"><%= order_form.post_forefoot %></p>
+        </div>
+
+        <div class="form-group">
+          <label>Right</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[post_forefoot_right_medial]', order_form.post_forefoot_right_medial, :class => 'form-control', :placeholder => 'Medial' %>
+              <p class="value">Medial: <%= order_form.post_forefoot_right_medial %></p>
+            </div>
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[post_forefoot_right_lateral]', order_form.post_forefoot_right_lateral, :class => 'form-control', :placeholder => 'Lateral' %>
+              <p class="value">Lateral: <%= order_form.post_forefoot_right_lateral %></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Left</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[post_forefoot_left_medial]', order_form.post_forefoot_left_medial, :class => 'form-control', :placeholder => 'Medial' %>
+              <p class="value">Medial: <%= order_form.post_forefoot_left_medial %></p>
+            </div>
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[post_forefoot_left_lateral]', order_form.post_forefoot_left_lateral, :class => 'form-control', :placeholder => 'Lateral' %>
+              <p class="value">Lateral: <%= order_form.post_forefoot_left_lateral %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-5">
+        <div class="form-group">
+          <label>Shell Width</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_width]', :narrow, order_form.shell_width == 'narrow' %> Narrow (Bisect 1st and 5th)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_width]', :medium, order_form.shell_width == 'medium' %> Medium (Bisect 1st, Outside 5th)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_width]', :wide, order_form.shell_width == 'wide' %> Wide (Outside 1st and 5th)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[shell_width]', :none, order_form.shell_width == 'none' || order_form.shell_width.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.shell_width %></p>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label>Heel Cup</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_cup]', :low, order_form.heel_cup == 'low' %> Low (8mm)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_cup]', :standard, order_form.heel_cup == 'standard' %> Standard (12mm)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_cup]', :deep, order_form.heel_cup == 'deep' %> Deep (15mm)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_cup]', :x_deep, order_form.heel_cup == 'x_deep' %> X-Deep (18mm)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_cup]', :none, order_form.heel_cup == 'none' || order_form.heel_cup.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.heel_cup %></p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Heel Lift</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[heel_lift_left]', order_form.heel_lift_left, :class => 'form-control', :placeholder => 'Left' %>
+              <p class="value">Left: <%= order_form.heel_lift_left %></p>
+            </div>
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[heel_lift_right]', order_form.heel_lift_right, :class => 'form-control', :placeholder => 'Right' %>
+              <p class="value">Right: <%= order_form.heel_lift_right %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Pronation Skive Heel Post Left</label>
+          <div>
+            <label class="checkbox-inline">
+              <%= check_box_tag 'options[pronation_skive_heel_post_left_corner_skive_only]', true, order_form.pronation_skive_heel_post_left_corner_skive_only %>
+              <%= hidden_field_tag 'options[pronation_skive_heel_post_left_corner_skive_only]', false %> Corner Skive Only (STD) <b class="value"><%= order_form.pronation_skive_heel_post_left_corner_skive_only ? 'yes' : 'no' %></b>
+            </label>
+          </div>
+          <div>
+            <label class="checkbox-inline">
+              <%= check_box_tag 'options[pronation_skive_heel_post_left_skive_1_3_medial_post_surface]', true, order_form.pronation_skive_heel_post_left_skive_1_3_medial_post_surface %>
+              <%= hidden_field_tag 'options[pronation_skive_heel_post_left_skive_1_3_medial_post_surface]', false %> Skive 1/3 Medial Post Surface <b class="value"><%= order_form.pronation_skive_heel_post_left_skive_1_3_medial_post_surface ? 'yes' : 'no' %></b>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Pronation Skive Heel Post Right</label>
+          <div>
+            <label class="checkbox-inline">
+              <%= check_box_tag 'options[pronation_skive_heel_post_right_corner_skive_only]', true, order_form.pronation_skive_heel_post_right_corner_skive_only %>
+              <%= hidden_field_tag 'options[pronation_skive_heel_post_right_corner_skive_only]', false %> Corner Skive Only (STD) <b class="value"><%= order_form.pronation_skive_heel_post_right_corner_skive_only ? 'yes' : 'no' %></b>
+            </label>
+          </div>
+          <div>
+            <label class="checkbox-inline">
+              <%= check_box_tag 'options[pronation_skive_heel_post_right_skive_1_3_medial_post_surface]', true, order_form.pronation_skive_heel_post_right_skive_1_3_medial_post_surface %>
+              <%= hidden_field_tag 'options[pronation_skive_heel_post_right_skive_1_3_medial_post_surface]', false %> Skive 1/3 Medial Post Surface <b class="value"><%= order_form.pronation_skive_heel_post_right_skive_1_3_medial_post_surface ? 'yes' : 'no' %></b>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Kirby Skive (cast mod)</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[kirby_skive_left]', order_form.kirby_skive_left, :class => 'form-control', :placeholder => 'Left' %>
+              <p class="value">Left: <%= order_form.kirby_skive_left %></p>
+            </div>
+            <div class="col-sm-6">
+              <%= text_field_tag 'options[kirby_skive_right]', order_form.kirby_skive_right, :class => 'form-control', :placeholder => 'Right' %>
+              <p class="value">Right: <%= order_form.kirby_skive_right %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Cover Length</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[cover_length]', :cover_shell_3_4, order_form.cover_length == 'cover_shell_3_4' %> 3/4 Cover Shell</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[cover_length]', :to_sulcus_7_8, order_form.cover_length == 'to_sulcus_7_8' %> 7/8 To Sulcus</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[cover_length]', :full_length, order_form.cover_length == 'full_length' %> Full Length</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[cover_length]', :none, order_form.cover_length == 'none' || order_form.cover_length.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.cover_length %></p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Top Cover</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[top_cover]', :vinyl, order_form.top_cover == 'vinyl' %> Vinyl</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[top_cover]', :pelite_eva_1_8, order_form.top_cover == 'pelite_eva_1_8' %> 1/8 Pelite/Eva</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[top_cover]', :spenco_1_16, order_form.top_cover == 'spenco_1_16' %> 1/16 Spenco</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[top_cover]', :spenco_1_8, order_form.top_cover == 'spenco_1_8' %> 1/8 Spenco</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[top_cover]', :none, order_form.top_cover == 'none' || order_form.top_cover.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.top_cover %></p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Cushion</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[cushion]', :ppt_poron_1_16, order_form.cushion == 'ppt_poron_1_16' %> 1/16 PPT/Poron</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[cushion]', :ppt_poron_1_8, order_form.cushion == 'ppt_poron_1_8' %> 1/8 PPT/Poron</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[cushion]', :pelite_eva_1_8, order_form.cushion == 'pelite_eva_1_8' %> 1/8 Pelite/Eva</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[cushion]', :none, order_form.cushion == 'none' || order_form.cushion.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.cushion %></p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label>Forefoot Cushion Left</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_left]', :ppt_poron_1_16, order_form.forefoot_cushion_left == 'ppt_poron_1_16' %> 1/16 PPT/Poron</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_left]', :ppt_poron_1_8, order_form.forefoot_cushion_left == 'ppt_poron_1_8' %> 1/8 PPT/Poron</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_left]', :pelite_eva_1_8, order_form.forefoot_cushion_left == 'pelite_eva_1_8' %> 1/8 Pelite/Eva</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_left]', :dancer_pad, order_form.forefoot_cushion_left == 'dancer_pad' %> Dancer Pad</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_left]', :none, order_form.forefoot_cushion_left == 'none' || order_form.forefoot_cushion_left.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.forefoot_cushion_left %></p>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label>Forefoot Cushion Right</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_right]', :ppt_poron_1_16, order_form.forefoot_cushion_right == 'ppt_poron_1_16' %> 1/16 PPT/Poron</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_right]', :ppt_poron_1_8, order_form.forefoot_cushion_right == 'ppt_poron_1_8' %> 1/8 PPT/Poron</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_right]', :pelite_eva_1_8, order_form.forefoot_cushion_right == 'pelite_eva_1_8' %> 1/8 Pelite/Eva</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_right]', :dancer_pad, order_form.forefoot_cushion_right == 'dancer_pad' %> Dancer Pad</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[forefoot_cushion_right]', :none, order_form.forefoot_cushion_right == 'none' || order_form.forefoot_cushion_right.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.forefoot_cushion_right %></p>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label>Metatarsal Pads Left</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_left_thickness]', :low_1_16, order_form.metatarsal_pads_left_thickness == 'low_1_16' %> Low (1/16)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_left_thickness]', :medium_1_8, order_form.metatarsal_pads_left_thickness == 'medium_1_8' %> Medium (1/8)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_left_thickness]', :high_3_16, order_form.metatarsal_pads_left_thickness == 'high_3_16' %> High (3/16)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_left_thickness]', :none, order_form.metatarsal_pads_left_thickness == 'none' || order_form.metatarsal_pads_left_thickness.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.metatarsal_pads_left_thickness %></p>
+          <br>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_left_density]', :soft, order_form.metatarsal_pads_left_density == 'soft' %> Soft</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_left_density]', :firm, order_form.metatarsal_pads_left_density == 'firm' %> Firm</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_left_density]', :none, order_form.metatarsal_pads_left_density == 'none' || order_form.metatarsal_pads_left_density.blank? %> None</label></div>
+          </div>
+          <p class="value">Density: <%= order_form.metatarsal_pads_left_density %></p>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label>Metatarsal Pads Right</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_right_thickness]', :low_1_16, order_form.metatarsal_pads_right_thickness == 'low_1_16' %> Low (1/16)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_right_thickness]', :medium_1_8, order_form.metatarsal_pads_right_thickness == 'medium_1_8' %> Medium (1/8)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_right_thickness]', :high_3_16, order_form.metatarsal_pads_right_thickness == 'high_3_16' %> High (3/16)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_right_thickness]', :none, order_form.metatarsal_pads_right_thickness == 'none' || order_form.metatarsal_pads_right_thickness.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.metatarsal_pads_right_thickness %></p>
+          <br>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_right_density]', :soft, order_form.metatarsal_pads_right_density == 'soft' %> Soft</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_right_density]', :firm, order_form.metatarsal_pads_right_density == 'firm' %> Firm</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[metatarsal_pads_right_density]', :none, order_form.metatarsal_pads_right_density == 'none' || order_form.metatarsal_pads_right_density.blank? %> None</label></div>
+          </div>
+          <p class="value">Density: <%= order_form.metatarsal_pads_right_density %></p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Met With Pad</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[met_pad_width]', :narrow, order_form.met_pad_width == 'narrow' %> Narrow (Inside 2 & 4)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[met_pad_width]', :medium, order_form.met_pad_width == 'medium' %> Medium (Bisect 2 & 4)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[met_pad_width]', :wide, order_form.met_pad_width == 'wide' %> Wide (Outside 2 & 4)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[met_pad_width]', :neuroma, order_form.met_pad_width == 'neuroma' %> Neuroma Pad (as marked)</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[met_pad_width]', :none, order_form.met_pad_width == 'none' || order_form.met_pad_width.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.met_pad_width %></p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Heel Padding Left</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_left_style]', :full_1_8, order_form.heel_padding_left_style == 'full_1_8' %> Full 1/8"</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_left_style]', :horseshoe, order_form.heel_padding_left_style == 'horseshoe' %> Horseshoe</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_left_style]', :none, order_form.heel_padding_left_style == 'none' || order_form.heel_padding_left_style.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.heel_padding_left_style %></p>
+          <br>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_left_extended]', :extended_pad_navicular, order_form.heel_padding_left_extended == 'extended_pad_navicular' %> Extended Proximal to Navicular</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_left_extended]', :extended_pad_cuboid,  order_form.heel_padding_left_extended == 'extended_pad_cuboid' %> Extended Proximal to Cuboid</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_left_extended]', :none,  order_form.heel_padding_left_extended == 'none' || order_form.heel_padding_left_extended.blank? %> None</label></div>
+          </div>
+          <p class="value">Extended to: <%= order_form.heel_padding_left_extended %></p>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label>Heel Padding Right</label>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_right_style]', :full_1_8, order_form.heel_padding_right_style == 'full_1_8' %> Full 1/8"</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_right_style]', :horseshoe, order_form.heel_padding_right_style == 'horseshoe' %> Horseshoe</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_right_style]', :none, order_form.heel_padding_right_style == 'none' || order_form.heel_padding_right_style.blank? %> None</label></div>
+          </div>
+          <p class="value"><%= order_form.heel_padding_right_style %></p>
+          <br>
+          <div class="choices">
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_right_extended]', :extended_pad_navicular, order_form.heel_padding_right_extended == 'extended_pad_navicular' %> Extended Proximal to Navicular</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_right_extended]', :extended_pad_cuboid, order_form.heel_padding_right_extended == 'extended_pad_cuboid' %> Extended Proximal to Cuboid</label></div>
+            <div><label class="radio-inline"><%= radio_button_tag 'options[heel_padding_right_extended]', :none, order_form.heel_padding_right_extended == 'none' || order_form.heel_padding_right_extended.blank? %> None</label></div>
+          </div>
+          <p class="value">Extended to: <%= order_form.heel_padding_right_extended %></p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div><label>Digit Cutout Left</label></div>
+          <div class="choices">
+            <% (0..5).each do |n| %>
+              <label class="radio-inline"><%= radio_button_tag 'options[digit_cutout_left]', n, n == order_form.digit_cutout_left.to_i || (order_form.digit_cutout_left.blank? && n == 0) %> <%= n %></label>
+            <% end %>
+          </div>
+          <p class="value"><%= order_form.digit_cutout_left %></p>
+        </div>
+        <div class="form-group">
+          <div><label>Cutout w/"U" Left</label></div>
+          <div class="choices">
+            <% (0..5).each do |n| %>
+              <label class="radio-inline"><%= radio_button_tag 'options[cutout_w_u_left]', n, n == order_form.cutout_w_u_left.to_i || (order_form.cutout_w_u_left.blank? && n == 0) %> <%= n %></label>
+            <% end %>
+          </div>
+          <p class="value"><%= order_form.cutout_w_u_left %></p>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-inline">
+            <%= check_box_tag 'options[navicular_relief_left]', true, order_form.navicular_relief_left %>
+            <%= hidden_field_tag 'options[navicular_relief_left]', false %> Navicular relief <b class="value"><%= order_form.navicular_relief_left ? 'yes' : 'no' %></b>
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <div><label>Digit Cutout Right</label></div>
+          <div class="choices">
+            <% (0..5).each do |n| %>
+              <label class="radio-inline"><%= radio_button_tag 'options[digit_cutout_right]', n, n == order_form.digit_cutout_right.to_i || (order_form.digit_cutout_right.blank? && n == 0) %> <%= n %></label>
+            <% end %>
+          </div>
+          <p class="value"><%= order_form.digit_cutout_right %></p>
+        </div>
+        <div class="form-group">
+          <div><label>Cutout w/"U" Right</label></div>
+            <div class="choices">
+            <% (0..5).each do |n| %>
+              <label class="radio-inline"><%= radio_button_tag 'options[cutout_w_u_right]', n, n == order_form.cutout_w_u_right.to_i || (order_form.cutout_w_u_right.blank? && n == 0) %> <%= n %></label>
+            <% end %>
+          </div>
+          <p class="value"><%= order_form.cutout_w_u_right %></p>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-inline">
+            <%= check_box_tag 'options[navicular_relief_right]', true, order_form.navicular_relief_right %>
+            <%= hidden_field_tag 'options[navicular_relief_right]', false %> Navicular relief <b class="value"><%= order_form.navicular_relief_right ? 'yes' : 'no' %></b>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-5">
+        <div class="form-group">
+          <label>Specialties</label>
+          <table width="100%">
+            <tr>
+              <td>Morton's extension</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.specialties_mortons_extension_left %>">
+                  <%= check_box_tag 'options[specialties_mortons_extension_left]', true, order_form.specialties_mortons_extension_left %>
+                  <%= hidden_field_tag 'options[specialties_mortons_extension_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.specialties_mortons_extension_right %>">
+                  <%= check_box_tag 'options[specialties_mortons_extension_right]', true, order_form.specialties_mortons_extension_right %>
+                  <%= hidden_field_tag 'options[specialties_mortons_extension_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>Reverse Morton's</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.specialties_reverse_mortons_left %>">
+                  <%= check_box_tag 'options[specialties_reverse_mortons_left]', true, order_form.specialties_reverse_mortons_left %>
+                  <%= hidden_field_tag 'options[specialties_reverse_mortons_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.specialties_reverse_mortons_right %>">
+                  <%= check_box_tag 'options[specialties_reverse_mortons_right]', true, order_form.specialties_reverse_mortons_right %>
+                  <%= hidden_field_tag 'options[specialties_reverse_mortons_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>Reverse Morton's</td>
+              <td>
+                <label class="checkbox-inline <%= 'yes' if order_form.specialties_tendon_relief_track_left %>">
+                  <%= check_box_tag 'options[specialties_tendon_relief_track_left]', true, order_form.specialties_tendon_relief_track_left %>
+                  <%= hidden_field_tag 'options[specialties_tendon_relief_track_left]', false %> Left
+                </label>
+                <label class="checkbox-inline <%= 'yes' if order_form.specialties_tendon_relief_track_right %>">
+                  <%= check_box_tag 'options[specialties_tendon_relief_track_right]', true, order_form.specialties_tendon_relief_track_right %>
+                  <%= hidden_field_tag 'options[specialties_tendon_relief_track_right]', false %> Right
+                </label>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-7">
+        <div class="form-group">
+          <%= label_tag 'options[notes]', 'Notes' %>
+          <%= text_area_tag 'options[notes]', order_form.notes, :class => 'form-control', :rows => 3 %>
+          <p class="value"><%= order_form.notes.blank? ? 'None.' : order_form.notes %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+</div>

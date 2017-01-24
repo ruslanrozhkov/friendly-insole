@@ -1,0 +1,52 @@
+<table style="width:100%">
+  <tr>
+    <td>
+      <p class="lede">
+        Dear <%= @order.ship_address.first_name %>
+      </p>
+      <p>
+        <%= Spree.t('order_mailer.cancel_email.instructions') %>
+      </p>
+      <br>
+      <table style="width:100%; background-color:#fcfcfc; border:solid thin lightgray;">
+        <tr>
+          <th style="padding:8px;" colspan="3"><%= Spree.t('order_mailer.cancel_email.order_summary_canceled') %>
+            <hr>
+          </th>
+        </tr>
+        <% @order.line_items.each do |item| %>
+          <tr>
+            <td style="padding:8px;"><%= item.variant.sku %></td>
+            <td style="padding:8px;">
+              <%= raw(item.variant.product.name) %>
+              <%= raw(item.variant.options_text) -%>
+            </td>
+            <td style="padding:8px;">(<%=item.quantity%>) <%= Spree.t('at_symbol') %> <%= item.single_money %> = <%= item.display_amount %></td>
+          </tr>
+        <% end %>
+        <tr><td colspan="3" style="padding:8px;"><hr></td></tr>
+        <tr>
+          <td></td>
+          <td style="padding:8px;"><%= Spree.t('order_mailer.cancel_email.subtotal') %></td>
+          <td style="padding:8px;"><%= @order.display_item_total %></td>
+        </tr>
+        <% @order.adjustments.eligible.each do |adjustment| %>
+          <tr>
+            <td></td>
+            <td style="padding:8px;"><%= raw(adjustment.label) %></td>
+            <td style="padding:8px;"><%= adjustment.display_amount %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td></td>
+          <td style="padding:8px;"><%= Spree.t('order_mailer.cancel_email.total') %></td>
+          <td style="padding:8px;"><%= @order.display_total %></td>
+        </tr>
+      </table>
+      <br>
+      <br>
+      <p>Regards,</p>
+      <p class="lede">The Friendly Insole Team</p>
+    </td>
+  </tr>
+</table>

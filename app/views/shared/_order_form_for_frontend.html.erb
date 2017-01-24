@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="form-group col-sm-4">
+        <%= label_tag :variant_id, 'Shoe Style' %>
+        <div id="product-variants">
+          <% @product.variants_and_option_values(current_currency).each_with_index do |v, i| %>
+            <% v.option_values.each do |ov| %>
+              <div><label class="radio-inline"><%= radio_button_tag :variant_id, v.id, i == 0, 'data-price' => v.price_in(current_currency).money %> <%= ov.presentation %></label></div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+    <%= render :partial => 'shared/order_form' %>
+  </div>
+</div>

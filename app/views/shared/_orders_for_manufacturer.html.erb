@@ -1,0 +1,85 @@
+
+<%= form_tag root_path, :class => 'form-inline text-right well well-sm orders-filter', :method => :get do %>
+    <div class="form-group">
+      <%= text_field_tag :search, params[:search], :class => 'form-control', :placeholder => 'Order Number' %>
+    </div>
+    <div class="form-group">
+      <%= select_tag :time, options_for_select(@times.collect {|t| [t['label'], t['label']]}, params[:time]), :class => 'form-control' %>
+    </div>
+    <%= submit_tag 'Search', :name => nil, :class => 'btn btn-default' %>
+<% end %>
+
+<div class="row">
+  <div class="col-sm-4">
+    <h5>Inbound Orders <span class="badge"><%= @inbound_orders.count %></span></h5>
+    <% if @inbound_orders.present? %>
+        <table class="table table-responsive manufacturer-tables">
+          <tbody>
+          <% @inbound_orders.each do |order| %>
+              <tr>
+                <td width="100%">
+                  <%= link_to order.number, order_url(order) %><br>
+                  <small>Updated <%= l order.status.updated_at.to_date, :format => '%b %d, %Y' %></small>
+                </td>
+                <td><a href="#" class="set-status-btn" data-order-number="<%= order.number %>" data-status="in production"><i class="glyphicon glyphicon-chevron-right"></i></a></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+    <% else %>
+        <div class="well well-sm">None.</div>
+    <% end %>
+  </div>
+  <div class="col-sm-4">
+    <h5>Orders in Production <span class="badge"><%= @in_progress_orders.count %></span></h5>
+    <% if @in_progress_orders.present? %>
+        <table class="table table-responsive manufacturer-tables">
+          <tbody>
+          <% @in_progress_orders.each do |order| %>
+              <tr>
+                <td><a href="#" class="set-status-btn" data-order-number="<%= order.number %>" data-status="inbound"><i class="glyphicon glyphicon-chevron-left"></i></a></td>
+                <td width="100%">
+                  <%= link_to order.number, order_url(order) %><br>
+                  <small>Updated <%= l order.status.updated_at.to_date, :format => '%b %d, %Y' %></small>
+                </td>
+                <td><a href="#" class="set-status-btn" data-order-number="<%= order.number %>" data-status="shipped"><i class="glyphicon glyphicon-chevron-right"></i></a></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+    <% else %>
+        <div class="well well-sm">None.</div>
+    <% end %>
+  </div>
+  <div class="col-sm-4">
+    <h5>Shipped Orders <span class="badge"><%= @shipped_orders.count %></span></h5>
+    <% if @shipped_orders.present? %>
+        <table class="table table-responsive manufacturer-tables">
+          <tbody>
+          <% @shipped_orders.each do |order| %>
+              <tr>
+                <td><a href="#" class="set-status-btn" data-order-number="<%= order.number %>" data-status="in production"><i class="glyphicon glyphicon-chevron-left"></i></a></td>
+                <td width="100%">
+                  <%= link_to order.number, order_url(order) %><i class="edit-tracking-btn glyphicon glyphicon-pencil text-primary pull-right"></i><br>
+                  <small>Updated <%= l order.status.updated_at.to_date, :format => '%b %d, %Y' %></small>
+                  <div class="tracking-number">
+                    <%= link_to order.manufacturer_shipment.tracking, '#' if order.manufacturer_shipment %>
+                  </div>
+                  <div class="tracking hide">
+                    <div class="input-group">
+                      <input class="form-control" type="text" value="<%= order.manufacturer_shipment.tracking if order.manufacturer_shipment %>" placeholder="Tracking #" />
+                      <span class="input-group-btn">
+                        <button class="set-tracking-btn btn btn-primary" type="button" data-order-number="<%= order.number %>"><i class="glyphicon glyphicon-ok"></i></button>
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+    <% else %>
+        <div class="well well-sm">None.</div>
+    <% end %>
+  </div>
+</div>

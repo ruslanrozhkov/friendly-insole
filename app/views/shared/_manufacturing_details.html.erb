@@ -1,0 +1,35 @@
+<div class="manufacturing-details">
+  <table class="table table-bordered">
+    <thead>
+    <th><%= Spree.t('state')%></th>
+    <th><%= Spree.t('last_updated')%></th>
+    </thead>
+    <tr>
+      <td>
+        <span class="tracking-number">
+        <% if order.status.present? %>
+            <%= order.status.current.capitalize %>
+            <%= link_to order.manufacturer_shipment.tracking, '#' if order.manufacturer_shipment %>
+        <% else %>
+            Missing manufacturing data entry.
+        <% end %>
+        </span>
+
+        <% if order.status.current == 'shipped' %>
+            <div class="form-inline tracking pull-left hide">
+              <div class="input-group">
+                <input class="form-control" type="text" value="<%= order.manufacturer_shipment.tracking if order.manufacturer_shipment %>" placeholder="Tracking #" />
+                  <span class="input-group-btn">
+                    <button class="set-tracking-btn btn btn-primary" type="button" data-order-number="<%= order.number %>"><i class="glyphicon glyphicon-ok"></i></button>
+                  </span>
+              </div>
+            </div>
+
+            <a href="#" class="edit-tracking-btn pull-right"><i class="glyphicon glyphicon-pencil"></i></a>
+        <% end %>
+      </td>
+      <td><%= l order.status.updated_at.to_time, :format => '%b %d, %Y at %l:%M %p' if order.status.present? %></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,6 @@
+<p><strong><%= Spree.t(:role) %></strong></p>
+<% @roles.each do |role| %>
+    <div class="form-group">
+      <label class="radio-inline"><%= radio_button_tag 'user[spree_role_ids][]', role.id, @user.spree_roles.blank? ? role.name == 'user' : @user.spree_roles.include?(role), :id => "user_spree_role_#{role.name}" %> <%= role.name %></label>
+    </div>
+<% end %>

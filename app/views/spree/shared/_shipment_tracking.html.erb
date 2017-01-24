@@ -1,0 +1,5 @@
+<div class="tracking-number">
+  <% order.shipments.each do |shipment| %>
+      <%= link_to shipment.tracking, '#' if shipment.tracking %>
+  <% end %>
+</div>

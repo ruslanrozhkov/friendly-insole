@@ -1,0 +1,72 @@
+<% content_for :page_title do %>
+    <%= Spree.t(:client_orders) %>
+<% end %>
+
+<% content_for :page_actions do %>
+    <%= link_to_with_icon 'arrow-left', Spree.t(:back_to_resource_list, resource: Spree.t(:report)), spree.admin_reports_url, class: 'btn btn-default' %>
+    <%= link_to_with_icon 'export', 'Export CSV', client_orders_admin_reports_path(format: 'csv').concat('?' + params.to_query), class: 'btn btn-success' %>
+    <%= link_to_with_icon 'download-alt', 'PDF', client_orders_admin_reports_path(format: 'pdf').concat('?' + params.to_query), class: 'btn btn-success' %>
+<% end %>
+
+<div class="well">
+  <%= search_form_for @search, :url => spree.client_orders_admin_reports_path  do |s| %>
+      <div class="form-group date-range-filter">
+        <div class="date-range-filter row">
+          <div class="col-md-4">
+            <%= label_tag 'q[user_email_cont]', 'client email' %>
+            <%= s.text_field :user_email_cont, :class=> 'form-control' %>
+          </div>
+          <div class="col-md-4">
+            <%= label_tag 'q[completed_at_gt]', Spree.t(:date_from) %>
+            <%= s.text_field :completed_at_gt, :class => 'datepicker datepicker-from form-control', :value => datepicker_field_value(params[:q][:completed_at_gt]) %>
+          </div>
+          <div class="col-md-4">
+            <%= label_tag 'q[completed_at_lt]', Spree.t(:date_to) %>
+            <%= s.text_field :completed_at_lt, :class => 'datepicker datepicker-to form-control', :value => datepicker_field_value(params[:q][:completed_at_lt]) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= button Spree.t(:search), 'search' %>
+      </div>
+  <% end %>
+</div>
+
+<table class="table table-bordered admin-report">
+  <thead>
+  <tr>
+    <th><%= Spree.t(:client_email) %></th>
+    <th><%= Spree.t(:date) %></th>
+    <th><%= Spree.t(:sub_total) %></th>
+    <th><%= Spree.t(:tax) %></th>
+    <th><%= Spree.t(:shipping) %></th>
+    <th><%= Spree.t(:promo) %></th>
+    <th><%= Spree.t(:sales_total) %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @orders.each do |order| %>
+      <tr>
+        <td><%= order.user ? order.user.email : '' %></td>
+        <td><%= l order.completed_at.to_date, :format => '%b %d, %Y' %></td>
+        <td><%= number_to_currency order.item_total %></td>
+        <td><%= number_to_currency order.additional_tax_total %></td>
+        <td><%= number_to_currency order.shipment_total %></td>
+        <td><%= number_to_currency order.promo_total %></td>
+        <td><%= number_to_currency order.total %></td>
+      </tr>
+  <% end %>
+
+  <% @totals.each do |key, row| %>
+      <tr>
+        <td colspan="2" class="text-right">Totals (<%= key %>)</td>
+        <td><strong><%= row[:item_total].format %></strong></td>
+        <td><strong><%= row[:tax_total].format %></strong></td>
+        <td><strong><%= row[:shipment_total].format %></strong></td>
+        <td><strong><%= row[:promo_total].format %></strong></td>
+        <td><strong><%= row[:sales_total].format %></strong></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

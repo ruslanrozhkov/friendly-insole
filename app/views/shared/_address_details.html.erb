@@ -1,0 +1,12 @@
+<div class="radio">
+  <label>
+    <%= f.radio_button type == 'bill' ? :bill_address_id : :ship_address_id, a.id %>
+    <%= a.firstname + ' ' + a.lastname %>
+    <%= a.address1 %>
+    <% if !a.address2.blank? %>
+        <%= a.address2 %>
+    <% end %>
+    <%= a.city + ' ' + a.country.name + ' ' + a.state.name %>
+    <%= a.zipcode %>
+  </label>
+</div>

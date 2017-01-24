@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  patient_id: MyString
+  age: 1
+  weight: MyString
+  shoe_size: MyString
+  gender: MyString
+  diabetic: MyString
+  notes: MyText
+  line_item_id: 
+
+two:
+  patient_id: MyString
+  age: 1
+  weight: MyString
+  shoe_size: MyString
+  gender: MyString
+  diabetic: MyString
+  notes: MyText
+  line_item_id: 

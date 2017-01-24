@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h1 class="panel-title">
+      <%= title %>
+    </h1>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+    <th><%= Spree.t('state')%></th>
+    <th><%= Spree.t('last_updated')%></th>
+    </thead>
+    <tr>
+      <td>
+        <% if order.status.present? %>
+            <%= order.status.current.capitalize %>
+            <span class="tracking-number">
+              <%= link_to order.manufacturer_shipment.tracking, '#' if order.manufacturer_shipment %>
+            </span>
+        <% else %>
+            Missing manufacturing data entry.
+        <% end %>
+      </td>
+      <td><%= l order.status.updated_at.to_time, :format => '%b %d, %Y at %l:%M %p' if order.status.present? %></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
