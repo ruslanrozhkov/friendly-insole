@@ -2,7 +2,7 @@
 lock '3.5.0'
 
 set :application, 'friendly-insole'
-set :repo_url, ''
+set :repo_url, 'git remote add origin git@github.com:ruslanrozhkov/friendly-insole.git'
 set :rbenv_ruby, '2.3.1'
 
 # Default branch is :master
