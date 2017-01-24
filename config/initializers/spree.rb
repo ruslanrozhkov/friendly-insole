@@ -18,7 +18,7 @@ Spree.config do |config|
   config.logo = 'logo.png'
 
   # Setup AWS S3 bucket only for staging and production
-  if Rails.env.staging?
+  if Rails.env.production?
     attachment_config = {
         s3_credentials: {
             access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
